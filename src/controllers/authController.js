@@ -9,7 +9,6 @@ class AuthController {
     try {
       const { email, password, name } = req.body;
 
-      // Check if user exists
       const [existingUser] = await db.execute(
         "SELECT id FROM users WHERE email = ?",
         [email]
@@ -19,16 +18,13 @@ class AuthController {
         return ApiResponse.badRequest(res, "User already exists");
       }
 
-      // Hash password
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      // Create user
       const [result] = await db.execute(
         "INSERT INTO users (name, email, password, created_at) VALUES (?, ?, ?, NOW())",
         [name, email, hashedPassword]
       );
 
-      // Generate token
       const token = jwt.sign(
         { id: result.insertId, email },
         config.jwt.secret,
@@ -53,9 +49,8 @@ class AuthController {
     try {
       const { email, password } = req.body;
 
-      // Get user
       const [users] = await db.execute(
-        "SELECT id, name, email, password FROM users WHERE email = ?",
+        "SELECT id, name, email, role, password FROM users WHERE email = ?",
         [email]
       );
 
@@ -65,15 +60,13 @@ class AuthController {
 
       const user = users[0];
 
-      // Verify password
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
         return ApiResponse.unauthorized(res, "Invalid credentials");
       }
 
-      // Generate token
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email, role: user.role },
         config.jwt.secret,
         { expiresIn: config.jwt.expiresIn }
       );
@@ -81,7 +74,12 @@ class AuthController {
       return ApiResponse.success(
         res,
         {
-          user: { id: user.id, name: user.name, email: user.email },
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
           token,
         },
         "Login successful"
@@ -89,6 +87,17 @@ class AuthController {
     } catch (error) {
       console.error("Login error:", error);
       return ApiResponse.error(res, "Login failed");
+    }
+  }
+
+  async logout(req, res) {
+    try {
+      jwt.destroy(req.token);
+
+      return ApiResponse.success(res, null, "Logged out successfully");
+    } catch (error) {
+      console.error("Logout error:", error);
+      return ApiResponse.error(res, "Logout failed");
     }
   }
 
