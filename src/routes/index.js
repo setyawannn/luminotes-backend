@@ -9,7 +9,7 @@ router.use("/users", userRoutes);
 
 router.get("/", (req, res) => {
   res.json({
-    message: "Express.js API Boilerplate",
+    message: "Luminotes API",
     version: "1.0.0",
     endpoints: {
       auth: "/api/auth",

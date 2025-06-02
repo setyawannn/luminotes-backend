@@ -8,9 +8,7 @@ module.exports = {
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "",
     database: process.env.DB_NAME || "db_luminotes",
-    connectionLimit: 10,
-    acquireTimeout: 60000,
-    timeout: 60000,
+    port: process.env.DB_PORT || 3306,
   },
   jwt: {
     secret: process.env.JWT_SECRET || "your-secret-key",
