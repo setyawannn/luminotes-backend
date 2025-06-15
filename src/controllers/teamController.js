@@ -228,6 +228,106 @@ class TeamController {
       return ApiResponse.error(res, "Failed to delete team");
     }
   }
+
+  async joinTeam(req, res) {
+    try {
+      const { code } = req.body;
+
+      const userId = req.user.id;
+
+      if (!code) {
+        return ApiResponse.badRequest(res, "Team code is required.");
+      }
+
+      const [teams] = await db.execute("SELECT id FROM teams WHERE code = ?", [code]);
+      if (teams.length === 0) {
+        return ApiResponse.notFound(res, "Invalid team code.");
+      }
+      const teamId = teams[0].id;
+
+      const [existingMembers] = await db.execute(
+        "SELECT id FROM team_members WHERE team_id = ? AND user_id = ?",
+        [teamId, userId]
+      );
+      if (existingMembers.length > 0) {
+        return ApiResponse.badRequest(res, "You are already a member of this team.");
+      }
+
+      await db.execute(
+        "INSERT INTO team_members (team_id, user_id, role) VALUES (?, ?, 'member')",
+        [teamId, userId]
+      );
+
+      return ApiResponse.success(res, { teamId: teamId }, "Successfully joined the team.");
+    } catch (error) {
+      console.error("Join Team error:", error);
+      return ApiResponse.error(res, "Failed to join team.");
+    }
+  }
+
+  async removeMember(req, res) {
+    try {
+      const { teamId, memberId } = req.params;
+      const requesterId = req.user.id;
+
+      if (requesterId.toString() === memberId.toString()) {
+        return ApiResponse.badRequest(res, "You cannot remove yourself.");
+      }
+
+      const [requesterRole] = await db.execute(
+        "SELECT role FROM team_members WHERE team_id = ? AND user_id = ?",
+        [teamId, requesterId]
+      );
+      if (requesterRole.length === 0 || requesterRole[0].role !== 'leader') {
+        return ApiResponse.forbidden(res, "Only the team leader can remove members.");
+      }
+
+      const [targetMember] = await db.execute(
+        "SELECT id FROM team_members WHERE team_id = ? AND user_id = ?",
+        [teamId, memberId]
+      );
+      if (targetMember.length === 0) {
+        return ApiResponse.notFound(res, "Member not found in this team.");
+      }
+
+      await db.execute(
+        "DELETE FROM team_members WHERE team_id = ? AND user_id = ?",
+        [teamId, memberId]
+      );
+
+      return ApiResponse.success(res, null, "Member removed successfully.");
+    } catch (error) {
+      console.error("Remove Member error:", error);
+      return ApiResponse.error(res, "Failed to remove member.");
+    }
+  }
+
+  async leaveTeam(req, res) {
+    try {
+      const { teamId } = req.params;
+      const userId = req.user.id;
+
+      const [[userRole], [memberCount]] = await Promise.all([
+        db.execute("SELECT role FROM team_members WHERE team_id = ? AND user_id = ?", [teamId, userId]),
+        db.execute("SELECT COUNT(*) as count FROM team_members WHERE team_id = ?", [teamId])
+      ]);
+
+      if (userRole.length === 0) {
+        return ApiResponse.notFound(res, "You are not a member of this team.");
+      }
+
+      if (userRole[0].role === 'leader' && memberCount[0].count === 1) {
+        return ApiResponse.badRequest(res, "You are the last member and the leader. Please delete the team instead of leaving.");
+      }
+
+      await db.execute("DELETE FROM team_members WHERE team_id = ? AND user_id = ?", [teamId, userId]);
+
+      return ApiResponse.success(res, null, "You have successfully left the team.");
+    } catch (error) {
+      console.error("Leave Team error:", error);
+      return ApiResponse.error(res, "Failed to leave team.");
+    }
+  }
 }
 
 module.exports = new TeamController();

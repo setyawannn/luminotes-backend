@@ -1,0 +1,539 @@
+{
+	"info": {
+		"_postman_id": "822832a3-e22c-4263-a09e-aa760a48a34f",
+		"name": "Luminotes API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24094180"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"prayogasetyawan.adi@gmail.com\",\r\n    \"password\" : \"rahasia123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"emma@gmail.com\",\r\n    \"password\" : \"rahasia123\",\r\n    \"name\" : \"Emma Watson\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "Get All Notes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "da",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"disabled": true
+								},
+								{
+									"key": "creator",
+									"value": "3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notes/10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Notes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Upload File Simple 2",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/My Space/Dump Image/dummy.pdf"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/My Space/Dump Image/Gedung-DPR.jpg"
+								},
+								{
+									"key": "is_public",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "topics",
+									"value": "testing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Notes",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Update",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "update",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/My Space/Dump Image/dummy.pdf"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/My Space/Dump Image/lewisjpg.jpg"
+								},
+								{
+									"key": "is_public",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "topics",
+									"value": "diganti",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notes/9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEL Notes",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "thumbnail",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_public",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "topics",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notes/9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Get All Teams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/teams",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/teams/22",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"test tim\",\r\n    \"description\" : \"desc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/teams",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Team",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"test tim update\",\r\n    \"description\" : \"desc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/teams/22",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Join Team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\" : \"J3Yo1Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/teams/join",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Member",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/teams/22/members/6",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"22",
+								"members",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Team",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/teams/22",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Leave Team",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/teams/22/leave",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"teams",
+								"22",
+								"leave"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJlbW1hQGdtYWlsLmNvbSIsImlhdCI6MTc0OTk5MDAwNywiZXhwIjoxNzUwMDc2NDA3fQ.C0S5EhRsESLTGde9LuFfjarU3BeyXrctJQLd0_QfKVw",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

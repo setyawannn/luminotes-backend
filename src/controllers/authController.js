@@ -55,14 +55,14 @@ class AuthController {
       );
 
       if (users.length === 0) {
-        return ApiResponse.unauthorized(res, "Invalid credentials");
+        return ApiResponse.unauthorized(res, "Invalid email or password");
       }
 
       const user = users[0];
 
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return ApiResponse.unauthorized(res, "Invalid credentials");
+        return ApiResponse.unauthorized(res, "Invalid email or password");
       }
 
       const token = jwt.sign(
